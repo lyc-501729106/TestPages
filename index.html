@@ -155,7 +155,7 @@
             // 拼接跳转参数，把选中的类型传给小程序
             const query = `type=${selectedType}`;
             // 构造微信跳转链接
-            const jumpUrl = `weixin://dl/business/?appid=${appid}&page=${page}&query=${encodeURIComponent(query)}&env_version=${envVersion}`;
+            const jumpUrl = `weixin://dl/business/?appid=${appid}&path=${page}&query=${encodeURIComponent(query)}&env_version=${envVersion}`;
             
             // 执行跳转
             window.location.href = jumpUrl;
