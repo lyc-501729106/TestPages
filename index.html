@@ -1,165 +1,110 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>进件类型</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
-            background-color: #b8b8b8;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        /* 顶部导航栏 */
-        .page-header {
-            position: relative;
-            background: #f0f0f0;
-            padding: 14px 16px;
-            text-align: center;
-        }
-        .close-btn {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 28px;
-            color: #222;
-            line-height: 1;
-            cursor: pointer;
-        }
-        .header-title {
-            font-size: 22px;
-            font-weight: 500;
-            color: #222;
-        }
-        .header-domain {
-            font-size: 15px;
-            color: #666;
-            margin-top: 3px;
-        }
-        .more-btn {
-            position: absolute;
-            right: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 22px;
-            color: #222;
-            letter-spacing: 2px;
-        }
-
-        /* 中间弹窗 */
-        .select-modal {
-            width: 86%;
-            max-width: 420px;
-            margin: 130px auto 0;
-            background: #ffffff;
-            border-radius: 14px;
-            padding: 28px 22px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
-        .modal-title {
-            font-size: 24px;
-            font-weight: 500;
-            color: #222;
-            margin-bottom: 22px;
-        }
-        .option-item {
-            width: 100%;
-            padding: 16px 0;
-            margin-bottom: 18px;
-            background: #f2f3f5;
-            border: none;
-            border-radius: 8px;
-            font-size: 22px;
-            color: #333;
-            text-align: center;
-            cursor: pointer;
-            font-family: inherit;
-            transition: all 0.2s ease;
-        }
-        /* 选中状态样式 */
-        .option-item.active {
-            background: #5a8cff;
-            color: #ffffff;
-        }
-        .option-item:last-of-type {
-            margin-bottom: 26px;
-        }
-        .confirm-btn {
-            width: 100%;
-            padding: 16px 0;
-            background: #5a8cff;
-            border: none;
-            border-radius: 8px;
-            font-size: 22px;
-            color: #ffffff;
-            text-align: center;
-            cursor: pointer;
-            font-family: inherit;
-        }
-        .confirm-btn:active {
-            opacity: 0.85;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>选择主体类型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: #999;
+      font-family: system-ui, -apple-system, sans-serif;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+    }
+    .type-item {
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      text-align: center;
+      padding: 16px 0;
+      font-size: 20px;
+      color: #4b5563;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .type-item.active {
+      border-color: #2563eb;
+      background: #f8fafc;
+    }
+    .confirm-btn {
+      background-color: #2563eb;
+      color: white;
+      border-radius: 8px;
+      text-align: center;
+      padding: 18px 0;
+      font-size: 22px;
+      font-weight: 500;
+      border: none;
+      width: 100%;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-   
+<div class="w-[88%] max-w-[420px] bg-white rounded-xl p-8">
+  <h2 class="text-[28px] font-medium text-gray-900 mb-8">选择主体类型</h2>
 
-    <!-- 选择弹窗 -->
-    <div class="select-modal">
-        <div class="modal-title">选择主体类型</div>
-        <button class="option-item" data-type="xiaowei">小微</button>
-        <button class="option-item" data-type="getihu">个体户</button>
-        <button class="option-item" data-type="qiye">企业</button>
-        <button class="confirm-btn">确认</button>
-    </div>
+  <!-- 主体选项容器 -->
+  <div class="flex flex-col gap-4 mb-6">
+    <div class="type-item active" data-type="micro">小微</div>
+    <div class="type-item" data-type="individual">个体户</div>
+    <div class="type-item" data-type="company">企业</div>
+  </div>
 
-    <script>
-        const options = document.querySelectorAll('.option-item');
-        const confirmBtn = document.querySelector('.confirm-btn');
-        let selectedType = '';
+  <!-- 底部提示文字 -->
+  <p id="tip-text" class="text-gray-500 text-lg mb-8">身份证即可开通。</p>
 
-        // 单选切换选中状态
-        options.forEach(option => {
-            option.addEventListener('click', function() {
-                // 移除所有选中状态
-                options.forEach(item => item.classList.remove('active'));
-                // 给当前点击项添加选中状态
-                this.classList.add('active');
-                // 记录选中的类型
-                selectedType = this.getAttribute('data-type');
-            });
-        });
+  <!-- 确认按钮 -->
+  <button class="confirm-btn" id="confirmBtn">确认</button>
+</div>
 
-        
+<script>
+  // 元素获取
+  const typeItems = document.querySelectorAll('.type-item');
+  const tipText = document.getElementById('tip-text');
+  const confirmBtn = document.getElementById('confirmBtn');
 
-        // 确认按钮跳转小程序
-        confirmBtn.addEventListener('click', function() {
-            if (!selectedType) {
-                alert('请先选择主体类型');
-                return;
-            }
+  // 不同主体对应提示文案
+  const tipMap = {
+    micro: '身份证即可开通。',
+    individual: '需您提供本人名下有效营业执照。',
+    company: '需您提供本人名下有效营业执照。'
+  };
 
-            // ========== 请替换为你的小程序信息 ==========
-            const appid = 'wxa47c8db623796050';
-            const page = 'pages/form/form'; // 信息收集页路径
-            const envVersion = 'develop'; // 开发版develop，体验版trial，正式版release
-            // ==========================================
+  let selectedType = 'micro'; // 默认选中小微
 
-            // 拼接跳转参数，把选中的类型传给小程序
-            const query = `type=${selectedType}`;
-            // 构造微信跳转链接
-            const jumpUrl = `weixin://dl/business/?appid=${appid}&path=${page}&query=${encodeURIComponent(query)}&env_version=${envVersion}`;
-            
-            // 执行跳转
-            window.location.href = jumpUrl;
-        });
-    </script>
+  // 切换选中状态与提示文字
+  typeItems.forEach(item => {
+    item.addEventListener('click', () => {
+      // 清除全部激活
+      typeItems.forEach(i => i.classList.remove('active'));
+      // 当前选中
+      item.classList.add('active');
+      selectedType = item.dataset.type;
+      tipText.innerText = tipMap[selectedType];
+    });
+  });
+
+  // 确认按钮点击：跳转微信小程序
+  confirmBtn.addEventListener('click', () => {
+    // 方式1：微信环境内直接跳转小程序（推荐微信浏览器打开）
+    // 替换为你的小程序原始ID、路径
+    const appId = 'wxa47c8db623796050'; // 替换小程序AppID
+    const pagePath = 'pages/form/form?type=' + selectedType; // 携带选中类型参数传给小程序
+
+    // 判断是否在微信内置浏览器
+    const isWechat = navigator.userAgent.toLowerCase().indexOf('micromessenger') !== -1;
+    if (isWechat) {
+      // 微信跳转小程序API
+      window.location.href = `wxapp://${appId}?path=${encodeURIComponent(pagePath)}`;
+    } else {
+      // 外部浏览器：展示小程序码提示，或跳转公众号/下载微信
+      alert('请在微信内打开页面');
+    }
+  });
+</script>
 </body>
 </html>
